@@ -1,4 +1,4 @@
-# main.py
+# app.py
 import streamlit as st
 # Placeholder imports, replace with actual imports as per your project requirements
 from crewai import CrewAIOrchestrator
