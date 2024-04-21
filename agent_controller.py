@@ -1,4 +1,3 @@
-# Central controller to manage agent responses and combine them
 class AgentController:
     def __init__(self, agents):
         self.agents = agents  # List of agents
