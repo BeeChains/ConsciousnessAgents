@@ -1,7 +1,7 @@
 import streamlit as st
 import os
 import logging
-from crewai import Agent, Task, Crew
+from crewai import Agent, Task, Crew, Process
 from crewai_tools import SerperDevTool
 from pydantic import BaseModel, model_validator
 
