@@ -3,6 +3,18 @@ import streamlit as st
 # You will need actual implementations or stubs for Classifier and Responder.
 from crewai import Agent, Task, Crew, Process
 from langchain_community.llms import Ollama
+from pydantic import BaseModel, model_validator
+
+class User(BaseModel):
+    username: str
+    age: int
+
+    @model_validator(mode='after')
+    def check_age(cls, model):
+        if model.age < 18:
+            raise ValueError("User must be at least 18 years old")
+        return model
+
 
 # Define specialized agents for different aspects of consciousness.
 class Agent(Classifier, Responder):
