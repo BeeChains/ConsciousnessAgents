@@ -1,47 +1,39 @@
 import streamlit as st
+import os
 import logging
-from streamlit_agent_logic import get_agents  # Importing the list of agents
+from agent_logic import create_agents  # Function to initialize multiple agents
+from agent_controller import AgentController  # Central controller for managing agent responses
+
+# Set up environment variables for API keys (ensure these are set correctly in your system)
+os.environ["LLAMA3_API_KEY"] = "YOUR_LLAMA3_API_KEY"  # Replace with your API key
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Initialize the Streamlit app
+# Define Streamlit App
 st.title("Consciousness Research Assistant")
 
-# Define agent expertise
-agents = get_agents()  # This returns a list of agents, each with a specific role/expertise
+# Initialize agents
+agents = create_agents()  # Function to initialize and return a list of agents
 
-# Track the interaction history
-interaction_history = []
-
-# Function to interact with agents and gather responses based on their expertise
-def interact_with_agents(question):
-    # Create a new interaction for this question
-    interaction = {"User": question}
-    
-    for agent in agents:
-        # Each agent provides a response based on their expertise
-        response = agent.respond(question)
-        interaction[agent.name] = response  # Store each agent's response
-
-    interaction_history.append(interaction)  # Add the new interaction to the history
+# Create agent controller
+controller = AgentController(agents)  # Controller to manage agent interactions
 
 # User question input
-question = st.text_input("Enter your question about consciousness:")
+question = st.text_input("Ask a question about consciousness:")
 
-# Button to trigger agent interactions
+# Button to trigger agent responses
 if st.button("Ask") and question.strip():
     try:
-        interact_with_agents(question)  # Interact with all agents
+        # Get responses from all agents
+        responses = controller.handle_question(question)  # Get responses from all agents
 
-        # Display the interaction history
-        for i, interaction in enumerate(interaction_history):
-            st.write(f"Interaction {i + 1}:")
-            for key, value in interaction.items():
-                st.write(f"{key}: {value}")
+        # Display responses in Streamlit
+        for agent_name, response in responses.items():
+            st.write(f"{agent_name}: {response}")
 
-        logger.info(f"User asked: '{question}' and interacted with agents.")
+        logger.info(f"User asked: '{question}' and received responses from agents.")
 
     except Exception as e:
         st.write("An error occurred while processing your request.")
