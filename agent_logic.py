@@ -4,5 +4,5 @@ class Agent:
         self.description = description
     
     def respond(self, question):
-        # Placeholder logic for agent responses; adjust as needed
-        return f"{self.name} responding to: {question}"
+        # This is a simple response mechanism; adjust based on the agent's role
+        return f"{self.name}: {self.description} - In response to your question, '{question}'"
