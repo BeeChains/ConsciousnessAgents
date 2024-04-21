@@ -1,5 +1,6 @@
 streamlit  # For Streamlit-based UI
 crewai  # For CrewAI orchestrator
-langchain_community_llms  # For Langchain and Ollama integration
+ langchain-community-llms # For Langchain and Ollama integration
 ollama  # The Ollama package for integrating language models
 torch  # If Ollama requires PyTorch or similar deep learning frameworks
+langchain-community-llms
