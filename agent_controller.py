@@ -9,7 +9,7 @@ class AgentController:
         # Send a request to Ollama's Llama3 model to generate a response
         try:
             response = requests.post(
-                f"http://localhost:11434/api/generate",  # Endpoint for Ollama server
+                f"http://localhost:11420/api/generate",  # Endpoint for Ollama server
                 json={"model": self.model_name, "prompt": prompt}
             )
             
