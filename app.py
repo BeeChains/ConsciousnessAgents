@@ -1,5 +1,3 @@
-# app.py
-
 import streamlit as st
 # Assuming implementation-specific modules. These are conceptual.
 # You will need actual implementations or stubs for Classifier and Responder.
