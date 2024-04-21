@@ -13,18 +13,6 @@ os.environ["SERPER_API_KEY"] = "YOUR_SERPER_API_KEY"
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Pydantic model for user with validation
-class User(BaseModel):
-    username: str
-    age: int
-
-    @model_validator  # Corrected decorator
-    def check_age(cls, values):
-        if values["age"] < 18:
-            raise ValueError("User must be at least 18 years old.")
-        return values
-
-
 # Define Streamlit App
 st.title("Consciousness Research Assistant")
 
