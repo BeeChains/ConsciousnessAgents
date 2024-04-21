@@ -1,7 +1,6 @@
 import streamlit as st
 import logging
-from agent_logic import create_agents  # Function to initialize agents
-from agent_controller import AgentController  # Controller to manage agents and interactions
+from agent_controller import AgentController  # Controller to manage interactions with Ollama
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -10,9 +9,8 @@ logger = logging.getLogger(__name__)
 # Define Streamlit App
 st.title("Consciousness Research Assistant")
 
-# Initialize agents and controller
-agents = create_agents()  # Get a list of agents
-controller = AgentController(agents)  # Create controller to manage agents and Ollama communication
+# Instantiate the agent controller
+controller = AgentController("consciousness")  # Name of the consciousness-focused model
 
 # User question input
 question = st.text_input("Ask a question about consciousness:")
@@ -20,14 +18,13 @@ question = st.text_input("Ask a question about consciousness:")
 # Button to trigger agent responses
 if st.button("Ask") and question.strip():
     try:
-        # Get responses from all agents using Ollama Llama3 model
-        responses = controller.handle_question(question)  # Retrieve responses from agents
+        # Get the response from the consciousness-focused model via the controller
+        response = controller.get_response(question)
 
-        # Display responses in Streamlit
-        for agent_name, response in responses.items():
-            st.write(f"{agent_name}: {response}")
+        # Display the response in Streamlit
+        st.write(f"Response: {response}")
 
-        logger.info(f"User asked: '{question}' and received responses from agents.")
+        logger.info(f"User asked: '{question}' and received response: '{response}'.")
 
     except Exception as e:
         st.write("An error occurred while processing your request.")
