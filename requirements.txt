@@ -1,5 +1,4 @@
 streamlit
 crewai
-langchain-community-llms
 ollama
 torch
