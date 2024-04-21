@@ -5,6 +5,7 @@ from crewai import Agent, Task, Crew, Process
 from langchain_community.llms import Ollama
 from pydantic import BaseModel, model_validator
 
+skip_on_failure=True
 class User(BaseModel):
     username: str
     age: int
