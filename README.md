@@ -23,8 +23,11 @@ LLama3 Consciousness Agents - Agent 1: Handles inquiries about the philosophical
     # PARAMETER frequency_penalty 0.5  # Penalizes repeated tokens
     # PARAMETER presence_penalty 0.3  # Penalizes repeated topics or concepts
 
+# Create
+    ollama create consciousness_agents -f Modelfile
+# Run Agents
+    ollama run consciousness_agents
 
-    
 # Install 
     git clone https://github.com/BeeChains/ConsciousnessAgents.git
     pip install -r requirements.txt
