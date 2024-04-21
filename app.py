@@ -1,16 +1,22 @@
+import os
 import streamlit as st
 import logging
-from pydantic import BaseModel, model_validator
 from crewai import Agent, Task, Crew, Process
-from langchain_community.llms import Ollama
+from langchain.llms import Ollama
+from pydantic import BaseModel, model_validator
+from crewai_tools import SerperDevTool
 
 
-# Set up logging
+# Set up environment variables for API keys
+os.environ["OPENAI_API_KEY"] = "YOUR_OPENAI_API_KEY"
+os.environ["SERPER_API_KEY"] = "YOUR_SERPER_API_KEY"
+
+# Initialize logging for monitoring
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-# Define Pydantic model for user with age validation
+# Define a Pydantic model for User with a basic validation
 class User(BaseModel):
     username: str
     age: int
@@ -18,34 +24,20 @@ class User(BaseModel):
     @model_validator(mode='after')
     def check_age(cls, model):
         if model.age < 18:
-            raise ValueError("User must be at least 18 years old")
+            raise ValueError("User must be at least 18 years old.")
         return model
 
 
-# Define specialized agents for different aspects of consciousness
-class Agent:
-    def __init__(self, role, goal, learning_strategy, knowledge_base):
-        self.role = role
-        self.goal = goal
-        self.learning_strategy = learning_strategy
-        self.knowledge_base = knowledge_base
-
-    def classify(self, question):
-        # Placeholder for classification logic
-        pass
-
-    def respond(self, question):
-        # Placeholder for response logic
-        return f"Responding as {self.role} to '{question}'"
-
-
+# Define the specialized agents with roles and goals
 class PhilosophicalAspectsAgent(Agent):
     def __init__(self):
         super().__init__(
             role="Philosophical Explorer",
             goal="Explore philosophical dimensions of consciousness.",
-            learning_strategy="Socratic dialogue and comparative analysis",
-            knowledge_base="Philosophy of mind, metaphysics, and ethics."
+            backstory="You are a researcher in philosophical studies, exploring various aspects of consciousness.",
+            tools=[SerperDevTool()],  # Add the SerperDevTool for search capabilities
+            verbose=True,
+            allow_delegation=False
         )
 
 
@@ -54,8 +46,9 @@ class NeuralCorrelatesAgent(Agent):
         super().__init__(
             role="Neuroscience Investigator",
             goal="Identify neural correlates of consciousness.",
-            learning_strategy="Empirical analysis and data-driven hypothesis testing",
-            knowledge_base="Neuroanatomy, brain imaging studies, neurobiology."
+            backstory="You are a neuroscience expert focused on discovering brain regions associated with consciousness.",
+            verbose=True,
+            allow_delegation=False
         )
 
 
@@ -63,13 +56,14 @@ class QuantumTheoriesAgent(Agent):
     def __init__(self):
         super().__init__(
             role="Quantum Consciousness Theorist",
-            goal="Investigate quantum mechanics in consciousness.",
-            learning_strategy="Theoretical modeling and interdisciplinary inquiry",
-            knowledge_base="Quantum physics, quantum cognition theories."
+            goal="Investigate quantum mechanics in relation to consciousness.",
+            backstory="You specialize in quantum theories and their implications for consciousness.",
+            verbose=True,
+            allow_delegation=True
         )
 
 
-# Initialize agents
+# Initialize the agents with specific roles
 agents = {
     "Philosophical Aspects": PhilosophicalAspectsAgent(),
     "Neural Correlates": NeuralCorrelatesAgent(),
@@ -77,11 +71,7 @@ agents = {
 }
 
 
-# Initialize the Ollama model (Placeholder for actual model initialization)
-ollama_model = Ollama(model="llama3:8b")
-
-
-# Streamlit UI
+# Set up Streamlit UI
 st.title("Consciousness Research Assistant")
 
 # User selects the aspect of consciousness
@@ -93,7 +83,6 @@ selected_aspect = st.selectbox(
 # User inputs their question about consciousness
 question = st.text_input("What's your question about consciousness?")
 
-
 # Process and respond to the question when the 'Ask' button is clicked
 if st.button('Ask') and question.strip():
     try:
@@ -102,7 +91,7 @@ if st.button('Ask') and question.strip():
         st.write(response)
         logger.info(f"User asked: '{question}' and received: '{response}'")
     except Exception as e:
-        st.write("An error occurred while processing your request.")
-        logger.error(f"Error: {e}")
+        st.write("An error occurred while processing your request. Please try again.")
+        logger.error(f"Error: {str(e)}")
 else:
-    st.write("Please enter a question.")
+    st.write("Please enter a valid question.")
