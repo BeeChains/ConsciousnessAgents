@@ -1,48 +1,41 @@
 import streamlit as st
-import os
 import logging
-from pydantic import BaseModel, root_validator
-from agent_logic import Agent  # Assuming this module defines the Agent class
-from streamlit_agent_logic import get_agents  # Modified to return a list of agents
-
-# Set environment variables for API keys
-os.environ["OPENAI_API_KEY"] = "YOUR_OPENAI_API_KEY"
-os.environ["SERPER_API_KEY"] = "YOUR_SERPER_API_KEY"
+from streamlit_agent_logic import get_agents  # Importing the list of agents
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Define Streamlit App
+# Initialize the Streamlit app
 st.title("Consciousness Research Assistant")
 
-# Define agent interactions
-agents = get_agents()  # Get a list of agents from the helper function
+# Define agent expertise
+agents = get_agents()  # This returns a list of agents, each with a specific role/expertise
 
-# Interaction history
+# Track the interaction history
 interaction_history = []
 
-# Define a function to interact with agents
+# Function to interact with agents and gather responses based on their expertise
 def interact_with_agents(question):
-    # Simulate a dialogue between agents based on user input
+    # Create a new interaction for this question
     interaction = {"User": question}
     
     for agent in agents:
-        # Each agent responds to the question
+        # Each agent provides a response based on their expertise
         response = agent.respond(question)
-        interaction[agent.name] = response  # Store the agent's response in the history
-    
-    interaction_history.append(interaction)  # Add interaction to history
+        interaction[agent.name] = response  # Store each agent's response
+
+    interaction_history.append(interaction)  # Add the new interaction to the history
 
 # User question input
 question = st.text_input("Enter your question about consciousness:")
 
-# Respond to the question when the 'Ask' button is clicked
+# Button to trigger agent interactions
 if st.button("Ask") and question.strip():
     try:
-        interact_with_agents(question)  # Trigger interaction with agents
-        
-        # Display interaction history
+        interact_with_agents(question)  # Interact with all agents
+
+        # Display the interaction history
         for i, interaction in enumerate(interaction_history):
             st.write(f"Interaction {i + 1}:")
             for key, value in interaction.items():
