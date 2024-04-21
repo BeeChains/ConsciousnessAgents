@@ -18,7 +18,7 @@ class User(BaseModel):
     username: str
     age: int
 
-    @root_validator  # Corrected decorator
+    @model_validator  # Corrected decorator
     def check_age(cls, values):
         if values["age"] < 18:
             raise ValueError("User must be at least 18 years old.")
