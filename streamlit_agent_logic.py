@@ -1,9 +1,9 @@
-from agent_logic import Agent
+from agent_logic import Agent  # Ensure this module is correct
 
+# Define a list of agents, each with a specific expertise
 def get_agents():
-    # Define a list of agents with their names and descriptions
     return [
-        Agent("Philosophical Explorer", "Explore philosophical aspects of consciousness."),
-        Agent("Neuroscience Investigator", "Study the neural correlates of consciousness."),
-        Agent("Quantum Consciousness Theorist", "Explore quantum mechanics and consciousness."),
+        Agent("Philosophical Explorer", "Explores philosophical aspects of consciousness."),
+        Agent("Neuroscience Investigator", "Studies the neural correlates of consciousness."),
+        Agent("Quantum Consciousness Theorist", "Explores quantum mechanics and consciousness."),
     ]
