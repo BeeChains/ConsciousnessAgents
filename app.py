@@ -3,7 +3,7 @@
 import streamlit as st
 # Assuming implementation-specific modules. These are conceptual.
 # You will need actual implementations or stubs for Classifier and Responder.
-from crewai import CrewAIOrchestrator
+from crewai import Agent, Task, Crew, Process
 from langchain_community_llms import Ollama
 
 # Define specialized agents for different aspects of consciousness.
