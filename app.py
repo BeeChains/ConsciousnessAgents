@@ -1,11 +1,16 @@
 import streamlit as st
-# Assuming implementation-specific modules. These are conceptual.
-# You will need actual implementations or stubs for Classifier and Responder.
+import logging
+from pydantic import BaseModel, model_validator
 from crewai import Agent, Task, Crew, Process
 from langchain_community.llms import Ollama
-from pydantic import BaseModel, model_validator
 
-skip_on_failure=True
+
+# Set up logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+
+# Define Pydantic model for user with age validation
 class User(BaseModel):
     username: str
     age: int
@@ -17,8 +22,8 @@ class User(BaseModel):
         return model
 
 
-# Define specialized agents for different aspects of consciousness.
-class Agent(Classifier, Responder):
+# Define specialized agents for different aspects of consciousness
+class Agent:
     def __init__(self, role, goal, learning_strategy, knowledge_base):
         self.role = role
         self.goal = goal
@@ -32,7 +37,8 @@ class Agent(Classifier, Responder):
     def respond(self, question):
         # Placeholder for response logic
         return f"Responding as {self.role} to '{question}'"
-        
+
+
 class PhilosophicalAspectsAgent(Agent):
     def __init__(self):
         super().__init__(
@@ -41,6 +47,7 @@ class PhilosophicalAspectsAgent(Agent):
             learning_strategy="Socratic dialogue and comparative analysis",
             knowledge_base="Philosophy of mind, metaphysics, and ethics."
         )
+
 
 class NeuralCorrelatesAgent(Agent):
     def __init__(self):
@@ -51,6 +58,7 @@ class NeuralCorrelatesAgent(Agent):
             knowledge_base="Neuroanatomy, brain imaging studies, neurobiology."
         )
 
+
 class QuantumTheoriesAgent(Agent):
     def __init__(self):
         super().__init__(
@@ -60,6 +68,7 @@ class QuantumTheoriesAgent(Agent):
             knowledge_base="Quantum physics, quantum cognition theories."
         )
 
+
 # Initialize agents
 agents = {
     "Philosophical Aspects": PhilosophicalAspectsAgent(),
@@ -67,22 +76,33 @@ agents = {
     "Quantum Theories": QuantumTheoriesAgent()
 }
 
+
 # Initialize the Ollama model (Placeholder for actual model initialization)
 ollama_model = Ollama(model="llama3:8b")
+
 
 # Streamlit UI
 st.title("Consciousness Research Assistant")
 
 # User selects the aspect of consciousness
-selected_aspect = st.selectbox("Choose the aspect of consciousness your question relates to:", list(agents.keys()))
+selected_aspect = st.selectbox(
+    "Choose the aspect of consciousness your question relates to:",
+    list(agents.keys())
+)
 
 # User inputs their question about consciousness
 question = st.text_input("What's your question about consciousness?")
 
+
 # Process and respond to the question when the 'Ask' button is clicked
-if st.button('Ask') and question:
-    agent = agents[selected_aspect]
-    response = agent.respond(question) # Simplified for demonstration
-    st.write(response)
+if st.button('Ask') and question.strip():
+    try:
+        agent = agents[selected_aspect]
+        response = agent.respond(question)
+        st.write(response)
+        logger.info(f"User asked: '{question}' and received: '{response}'")
+    except Exception as e:
+        st.write("An error occurred while processing your request.")
+        logger.error(f"Error: {e}")
 else:
     st.write("Please enter a question.")
