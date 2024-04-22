@@ -48,6 +48,12 @@ To install and set up Ollama, follow these steps:
     # PARAMETER frequency_penalty 0.5  # Penalizes repeated tokens
     # PARAMETER presence_penalty 0.3  # Penalizes repeated topics or concepts
 
+# Create the Consciousness Agents model using Ollama's create API endpoint
+    curl http://localhost:11420/api/create -d '{
+    "name": "consciousness_agents",
+    "modelfile": "FROM llama3\nPARAMETER temperature 0.7\nSYSTEM \"You are a group of consciousness experts.\"\n"
+}'
+
 # With the Modelfile Create the Consciousness Agents Model
     ollama create consciousness_agents -f Modelfile
     
