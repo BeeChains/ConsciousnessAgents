@@ -50,9 +50,9 @@ To install and set up Ollama, follow these steps:
 
 # Create the Consciousness Agents model using Ollama's create API endpoint
     curl http://localhost:11420/api/create -d '{
-    "name": "consciousness_agents",
-    "modelfile": "FROM llama3\nPARAMETER temperature 0.7\nSYSTEM \"You are a group of consciousness experts.\"\n"
-}'
+      "name": "consciousness_agents",
+      "modelfile": "FROM llama3\nPARAMETER temperature 0.7\nSYSTEM \"You are a team of consciousness experts:\n1. Philosophical Expert: Specializes in philosophical aspects of consciousness.\n2. Neuroscience Expert: Focuses on the neural correlates of consciousness.\n3. Quantum Consciousness Expert: Explores quantum mechanics in consciousness.\nWork together to answer questions about consciousness, considering each agent's expertise.\""
+    }' 
 
 # With the Modelfile Create the Consciousness Agents Model
     ollama create consciousness_agents -f Modelfile
